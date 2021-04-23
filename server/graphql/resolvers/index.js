@@ -1,4 +1,12 @@
+// Environment
+require('dotenv').config();
+const { JWT_SECRET } = process.env;
+
+// Encryption
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const getToken = (user) =>
+    jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '30 days' });
 
 exports.resolvers = {
     Query: {
@@ -21,31 +29,26 @@ exports.resolvers = {
 
             return {
                 user,
-                token: 'token',
+                token: getToken(user),
             };
         },
 
         signIn: async (_root, { input }, { db }) => {
-            // Check if user is correct
             const user = await db
                 .collection('users')
                 .findOne({ email: input.email });
-            if (!user) {
-                throw new Error('Invalid credential!');
-            }
 
-            // Check if password is correct
-            const isPasswordCorrect = bcrypt.compareSync(
-                input.password,
-                user.password,
-            );
-            if (!isPasswordCorrect) {
+            const isPasswordCorrect =
+                user && bcrypt.compareSync(input.password, user.password);
+
+            // Check if user or password is correct
+            if (!user || !isPasswordCorrect) {
                 throw new Error('Invalid credential!');
             }
 
             return {
                 user,
-                token: 'token',
+                token: getToken(user),
             };
         },
     },
