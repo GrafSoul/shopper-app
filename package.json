@@ -4,6 +4,8 @@
   "description": "Shopper is a mobile app for creating and managing your shopping list",
   "main": "server/index.js",
   "scripts": {
+    "dev": "nodemon server/index.js",
+    "start": "node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,13 +20,14 @@
     "list"
   ],
   "author": "Dmitriy Zatulovskiy",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/GrafSoul/shopper-app/issues"
   },
   "homepage": "https://github.com/GrafSoul/shopper-app#readme",
   "dependencies": {
     "apollo-server": "^2.23.0",
+    "global": "^4.4.0",
     "graphql": "^15.5.0"
   }
 }
