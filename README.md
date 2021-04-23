@@ -43,4 +43,4 @@ yarn start
 
 [nodejs]: https://nodejs.org/
 [yarn]: https://yarnpkg.com/
-[mit licensed]: https://github.com/GrafSoul/webrtc-video-chat.git/blob/master/LICENSE
+[mit licensed]: https://github.com/GrafSoul/shopper-app/blob/main/LICENSE
