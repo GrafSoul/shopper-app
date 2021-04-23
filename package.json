@@ -1,0 +1,30 @@
+{
+  "name": "shopper",
+  "version": "1.0.0",
+  "description": "Shopper is a mobile app for creating and managing your shopping list",
+  "main": "server/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GrafSoul/shopper-app.git"
+  },
+  "keywords": [
+    "shopper",
+    "mern",
+    "mobile",
+    "app",
+    "list"
+  ],
+  "author": "Dmitriy Zatulovskiy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GrafSoul/shopper-app/issues"
+  },
+  "homepage": "https://github.com/GrafSoul/shopper-app#readme",
+  "dependencies": {
+    "apollo-server": "^2.23.0",
+    "graphql": "^15.5.0"
+  }
+}
