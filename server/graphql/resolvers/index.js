@@ -2,6 +2,9 @@
 require('dotenv').config();
 const { JWT_SECRET } = process.env;
 
+// MongoDB
+const { ObjectID } = require('mongodb');
+
 // Encryption
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -11,8 +14,22 @@ const getToken = (user) =>
 exports.resolvers = {
     Query: {
         // Get all lists
-        getShopLists: () => [],
+        userShopLists: async (_root, _args, { db, user }) => {
+            if (!user) throw new Error('Authentication Error! Please Sign In.');
+            return await db
+                .collection('shop-list')
+                .find({ userIds: user._id })
+                .toArray();
+        },
+
+        getShopList: async (_root, { id }, { db, user }) => {
+            if (!user) throw new Error('Authentication Error! Please Sign In.');
+            return await db
+                .collection('shop-list')
+                .findOne({ _id: ObjectID(id) });
+        },
     },
+
     Mutation: {
         signUp: async (_root, { input }, { db }) => {
             // Password encryption
@@ -53,7 +70,7 @@ exports.resolvers = {
         },
 
         createShopList: async (_root, { title }, { db, user }) => {
-            if (!user) throw new Error('Authentication error! Please Sign In.');
+            if (!user) throw new Error('Authentication Error! Please Sign In.');
 
             const newShopList = {
                 title,
@@ -66,6 +83,69 @@ exports.resolvers = {
                 .insertOne(newShopList);
 
             return result.ops[0];
+        },
+
+        updateShopList: async (_root, { id, title }, { db, user }) => {
+            if (!user) throw new Error('Authentication Error. Please sign in');
+
+            await db.collection('shop-list').updateOne(
+                {
+                    _id: ObjectID(id),
+                },
+                {
+                    $set: {
+                        title,
+                    },
+                },
+            );
+
+            return await db
+                .collection('shop-list')
+                .findOne({ _id: ObjectID(id) });
+        },
+
+        deleteShopList: async (_root, { id }, { db, user }) => {
+            if (!user) throw new Error('Authentication Error. Please sign in');
+
+            // TODO only collaborators of this task list should be able to delete
+            await db.collection('shop-list').removeOne({ _id: ObjectID(id) });
+
+            return true;
+        },
+
+        addUserShopList: async (
+            _root,
+            { shopListId, userId },
+            { db, user },
+        ) => {
+            if (!user) throw new Error('Authentication Error. Please sign in');
+
+            const shopList = await db
+                .collection('shop-list')
+                .findOne({ _id: ObjectID(taskListId) });
+            if (!shopList) {
+                return null;
+            }
+            if (
+                shopList.userIds.find(
+                    (dbId) => dbId.toString() === userId.toString(),
+                )
+            ) {
+                return shopList;
+            }
+
+            await db.collection('shop-list').updateOne(
+                {
+                    _id: ObjectID(shopListId),
+                },
+                {
+                    $push: {
+                        userIds: ObjectID(userId),
+                    },
+                },
+            );
+            shopList.userIds.push(ObjectID(userId));
+            return shopList;
         },
     },
 

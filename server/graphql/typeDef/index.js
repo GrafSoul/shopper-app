@@ -4,7 +4,8 @@ const { gql } = require('apollo-server');
 // Types of data, queries and mutations
 exports.typeDefs = gql`
     type Query {
-        getShopLists: [ShopList!]!
+        userShopLists: [ShopList!]!
+        getShopList(id: ID!): ShopList!
     }
 
     type Mutation {
@@ -12,6 +13,10 @@ exports.typeDefs = gql`
         signIn(input: SignInInput): AuthUser!
 
         createShopList(title: String!): ShopList!
+        updateShopList(id: ID!, title: String!): ShopList!
+        deleteShopList(id: ID!): Boolean!
+
+        addUserShopList(shopListId: ID!, userId: ID!): ShopList!
     }
 
     input SignUpInput {
