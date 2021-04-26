@@ -51,10 +51,37 @@ exports.resolvers = {
                 token: getToken(user),
             };
         },
+
+        createShopList: async (_root, { title }, { db, user }) => {
+            if (!user) throw new Error('Authentication error! Please Sign In.');
+
+            const newShopList = {
+                title,
+                createdAt: new Date().toISOString(),
+                userIds: [user._id],
+            };
+
+            const result = await db
+                .collection('shop-list')
+                .insertOne(newShopList);
+
+            return result.ops[0];
+        },
     },
 
     // Transformation id to _id and vice versa
     User: {
         id: ({ _id, id }) => _id || id,
+    },
+
+    ShopList: {
+        id: ({ _id, id }) => _id || id,
+        progress: () => 0,
+        users: async ({ userIds }, _, { db }) =>
+            Promise.all(
+                userIds.map((userId) =>
+                    db.collection('users').findOne({ _id: userId }),
+                ),
+            ),
     },
 };

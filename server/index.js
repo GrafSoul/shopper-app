@@ -50,7 +50,7 @@ const start = async () => {
             return { db, user };
         },
     });
-    server.listen().then(({ url }) => {
+    server.listen({ port: 4000 }).then(({ url }) => {
         console.log(`🚀  Server ready at ${url}`);
     });
 };

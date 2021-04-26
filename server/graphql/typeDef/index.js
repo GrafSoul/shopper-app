@@ -10,6 +10,8 @@ exports.typeDefs = gql`
     type Mutation {
         signUp(input: SignUpInput): AuthUser!
         signIn(input: SignInInput): AuthUser!
+
+        createShopList(title: String!): ShopList!
     }
 
     input SignUpInput {
