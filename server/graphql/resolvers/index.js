@@ -113,7 +113,7 @@ exports.resolvers = {
             return true;
         },
 
-        addUserShopList: async (
+        addUserToShopList: async (
             _root,
             { shopListId, userId },
             { db, user },
@@ -122,7 +122,7 @@ exports.resolvers = {
 
             const shopList = await db
                 .collection('shop-list')
-                .findOne({ _id: ObjectID(taskListId) });
+                .findOne({ _id: ObjectID(shopListId) });
             if (!shopList) {
                 return null;
             }
