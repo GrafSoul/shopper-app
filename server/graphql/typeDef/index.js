@@ -17,6 +17,14 @@ exports.typeDefs = gql`
         deleteShopList(id: ID!): Boolean!
 
         addUserToShopList(shopListId: ID!, userId: ID!): ShopList!
+
+        createShopToDo(content: String!, shopListId: ID!): ShopToDo!
+        updateShopToDo(
+            id: ID!
+            content: String
+            isCompleted: Boolean
+        ): ShopToDo!
+        deleteShopToDo(id: ID!): Boolean!
     }
 
     input SignUpInput {

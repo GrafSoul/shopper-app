@@ -31,6 +31,7 @@ exports.resolvers = {
     },
 
     Mutation: {
+        // Authentication
         signUp: async (_root, { input }, { db }) => {
             // Password encryption
             const hashedPassword = bcrypt.hashSync(input.password);
@@ -69,6 +70,7 @@ exports.resolvers = {
             };
         },
 
+        // ShopList
         createShopList: async (_root, { title }, { db, user }) => {
             if (!user) throw new Error('Authentication Error! Please Sign In.');
 
@@ -147,6 +149,55 @@ exports.resolvers = {
             shopList.userIds.push(ObjectID(userId));
             return shopList;
         },
+
+        // ShopToDo
+        createShopToDo: async (
+            _root,
+            { content, shopListId },
+            { db, user },
+        ) => {
+            if (!user) {
+                throw new Error('Authentication Error. Please sign in');
+            }
+            const newToDo = {
+                content,
+                shopListId: ObjectID(shopListId),
+                isCompleted: false,
+            };
+            const result = await db.collection('shop-todo').insertOne(newToDo);
+
+            return result.ops[0];
+        },
+
+        updateShopToDo: async (_root, data, { db, user }) => {
+            if (!user) {
+                throw new Error('Authentication Error. Please sign in');
+            }
+
+            const result = await db.collection('shop-todo').updateOne(
+                {
+                    _id: ObjectID(data.id),
+                },
+                {
+                    $set: data,
+                },
+            );
+
+            return await db
+                .collection('shop-todo')
+                .findOne({ _id: ObjectID(data.id) });
+        },
+
+        deleteShopToDo: async (_root, { id }, { db, user }) => {
+            if (!user) {
+                throw new Error('Authentication Error. Please sign in');
+            }
+
+            // TODO only collaborators of this task list should be able to delete
+            await db.collection('shop-todo').removeOne({ _id: ObjectID(id) });
+
+            return true;
+        },
     },
 
     // Transformation id to _id and vice versa
@@ -156,12 +207,37 @@ exports.resolvers = {
 
     ShopList: {
         id: ({ _id, id }) => _id || id,
-        progress: () => 0,
+        progress: async ({ _id }, _, { db }) => {
+            const todos = await db
+                .collection('shop-todo')
+                .find({ shopListId: ObjectID(_id) })
+                .toArray();
+            const completed = todos.filter((todo) => todo.isCompleted);
+
+            if (todos.length === 0) {
+                return 0;
+            }
+
+            return (100 * completed.length) / todos.length;
+        },
         users: async ({ userIds }, _, { db }) =>
             Promise.all(
                 userIds.map((userId) =>
                     db.collection('users').findOne({ _id: userId }),
                 ),
             ),
+        shopToDos: async ({ _id }, _, { db }) =>
+            await db
+                .collection('shop-todo')
+                .find({ shopListId: ObjectID(_id) })
+                .toArray(),
+    },
+
+    ShopToDo: {
+        id: ({ _id, id }) => _id || id,
+        shopList: async ({ shopListId }, _, { db }) =>
+            await db
+                .collection('shop-list')
+                .findOne({ _id: ObjectID(shopListId) }),
     },
 };
