@@ -16,7 +16,7 @@ interface ShopListItemProps {
 }
 
 const ShopListItem = ({shopItem, onSubmit}: ShopListItemProps) => {
-    const [isChecked, setIsChecked] = useState(false);
+     const [isChecked, setIsChecked] = useState(false);
     const [content, setContent] = useState('');
     const input = useRef(null);
 
@@ -34,8 +34,15 @@ const ShopListItem = ({shopItem, onSubmit}: ShopListItemProps) => {
         }
     }, [input]);
 
+    const onKeyPress = ({ nativeEvent }) => {
+        if(nativeEvent.key === 'Backspace' && content === '') {
+            // Delete item
+            console.warn('Delete item');
+        }
+    }
+
     return (
-        <View style={styles.shopLists}>
+        <View style={styles.shopList}>
 			{/* Checkbox */}
 			<Checkbox 
                 isChecked={isChecked} 
@@ -47,12 +54,12 @@ const ShopListItem = ({shopItem, onSubmit}: ShopListItemProps) => {
                 ref={input}
                 value={content}
                 onChangeText={setContent}
-				underlineColorAndroid="transparent"
 				multiline
 				placeholder="Enter Shop List" 
 				style={styles.shopInput} 
                 onSubmitEditing={onSubmit}
                 blurOnSubmit
+                onKeyPress={onKeyPress}
                 />
 		</View>
     )
@@ -60,7 +67,7 @@ const ShopListItem = ({shopItem, onSubmit}: ShopListItemProps) => {
 export default ShopListItem
 
 const styles = StyleSheet.create({
-	shopLists: {
+	shopList: {
 		flexDirection: 'row',
 		alignItems: 'center',
         marginVertical: 3
@@ -68,6 +75,7 @@ const styles = StyleSheet.create({
 	shopInput: {
 		flex: 1,
 		marginLeft: 12,
+        height: 18,
 		fontSize: 18,
 		color: '#333',
 	}
