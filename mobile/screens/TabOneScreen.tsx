@@ -39,8 +39,10 @@ export default function TabOneScreen() {
 		<View style={styles.container}>
 			<TextInput 
 			value={title} 
-			style={styles.title} 
-			underlineColorAndroid="transparent"/>
+			style={styles.title}  
+			placeholder="Enter Title"
+			underlineColorAndroid="transparent"			
+			/>
 
 			<FlatList
 				data={list}

@@ -18,7 +18,7 @@ interface ShopListItemProps {
 const ShopListItem = ({shopItem, onSubmit}: ShopListItemProps) => {
      const [isChecked, setIsChecked] = useState(false);
     const [content, setContent] = useState('');
-    const input = useRef(null);
+    const input: any = useRef(null);
 
     useEffect(() => {
         if(!shopItem) {return}
@@ -30,9 +30,10 @@ const ShopListItem = ({shopItem, onSubmit}: ShopListItemProps) => {
     useEffect(() => {
         // get focus on input
         if(input.current) {
-            input?.current?.focus()
+            input.current.focus()
         }
     }, [input]);
+
 
     const onKeyPress = ({ nativeEvent }) => {
         if(nativeEvent.key === 'Backspace' && content === '') {
@@ -55,6 +56,9 @@ const ShopListItem = ({shopItem, onSubmit}: ShopListItemProps) => {
                 value={content}
                 onChangeText={setContent}
 				multiline
+                underlineColorAndroid="transparent"	
+                spellCheck={false}
+			    autoCorrect={false}
 				placeholder="Enter Shop List" 
 				style={styles.shopInput} 
                 onSubmitEditing={onSubmit}
