@@ -47,7 +47,7 @@ const ShopListItem = ({shopItem, onSubmit}: ShopListItemProps) => {
 			{/* Checkbox */}
 			<Checkbox 
                 isChecked={isChecked} 
-                onPress={() => { setIsChecked(!isChecked)}}
+                onPress={() => {setIsChecked(!isChecked)}}
                 />
 
 			{/* Text input */}
@@ -56,7 +56,7 @@ const ShopListItem = ({shopItem, onSubmit}: ShopListItemProps) => {
                 value={content}
                 onChangeText={setContent}
 				multiline
-                underlineColorAndroid="transparent"	
+                underlineColorAndroid="transparent"		
                 spellCheck={false}
 			    autoCorrect={false}
 				placeholder="Enter Shop List" 
@@ -78,9 +78,10 @@ const styles = StyleSheet.create({
 	},
 	shopInput: {
 		flex: 1,
-		marginLeft: 12,
-        height: 18,
+		marginLeft: 10,        
+        height: 28,
 		fontSize: 18,
 		color: '#333',
+        borderBottomColor: 'white'
 	}
 });

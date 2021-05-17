@@ -38,10 +38,10 @@ export default function TabOneScreen() {
 	return (
 		<View style={styles.container}>
 			<TextInput 
-			value={title} 
-			style={styles.title}  
-			placeholder="Enter Title"
-			underlineColorAndroid="transparent"			
+				value={title} 
+				style={styles.title}
+				placeholder="Enter Title"
+				underlineColorAndroid="transparent"			
 			/>
 
 			<FlatList
@@ -62,12 +62,16 @@ const styles = StyleSheet.create({
 	container: {
 		padding: 12,
 		flex: 1,
-		alignItems: 'center'
+		alignItems: 'center',
+		borderBottomColor: 'white'
+
 	},
 	title: {
 		width: '100%',
+		height: 38,
 		fontSize: 20,
 		fontWeight: 'bold',
+		borderBottomColor: 'white',
 	},
 	list: {
 		width: '100%'
