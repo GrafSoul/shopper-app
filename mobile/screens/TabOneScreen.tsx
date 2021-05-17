@@ -1,6 +1,6 @@
 // Core
 import React, {useState} from 'react';
-import { StyleSheet, TextInput, FlatList } from 'react-native';
+import { StyleSheet, TextInput, FlatList, KeyboardAvoidingView, Platform } from 'react-native';
 // Theme
 import { View } from '../components/Themed';
 // Components
@@ -36,9 +36,13 @@ export default function TabOneScreen() {
 	}
 
 	return (
-		<View style={styles.container}>
+		<KeyboardAvoidingView 
+		behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+		style={styles.container}
+		>
 			<TextInput 
 				value={title} 
+				onChangeText={setTitle}
 				style={styles.title}
 				placeholder="Enter Title"
 				underlineColorAndroid="transparent"			
@@ -54,7 +58,7 @@ export default function TabOneScreen() {
 				style={styles.list}
 			/>
 
-		</View>
+		</KeyboardAvoidingView>
 	);
 }
 
@@ -63,6 +67,7 @@ const styles = StyleSheet.create({
 		padding: 12,
 		flex: 1,
 		alignItems: 'center',
+		backgroundColor: 'white',
 		borderBottomColor: 'white'
 
 	},

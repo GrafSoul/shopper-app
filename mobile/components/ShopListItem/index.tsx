@@ -16,7 +16,7 @@ interface ShopListItemProps {
 }
 
 const ShopListItem = ({shopItem, onSubmit}: ShopListItemProps) => {
-     const [isChecked, setIsChecked] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
     const [content, setContent] = useState('');
     const input: any = useRef(null);
 
@@ -35,7 +35,7 @@ const ShopListItem = ({shopItem, onSubmit}: ShopListItemProps) => {
     }, [input]);
 
 
-    const onKeyPress = ({ nativeEvent }) => {
+    const onKeyPress = ({ nativeEvent }: any) => {
         if(nativeEvent.key === 'Backspace' && content === '') {
             // Delete item
             console.warn('Delete item');
@@ -59,7 +59,7 @@ const ShopListItem = ({shopItem, onSubmit}: ShopListItemProps) => {
                 underlineColorAndroid="transparent"		
                 spellCheck={false}
 			    autoCorrect={false}
-				placeholder="Enter Shop List" 
+				placeholder="Enter item" 
 				style={styles.shopInput} 
                 onSubmitEditing={onSubmit}
                 blurOnSubmit
@@ -74,12 +74,12 @@ const styles = StyleSheet.create({
 	shopList: {
 		flexDirection: 'row',
 		alignItems: 'center',
-        marginVertical: 3
+        marginVertical: 5,
+        marginLeft: 10
 	},
 	shopInput: {
 		flex: 1,
 		marginLeft: 10,        
-        height: 28,
 		fontSize: 18,
 		color: '#333',
         borderBottomColor: 'white'
