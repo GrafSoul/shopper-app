@@ -1,21 +1,35 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Pressable } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { styles } from './styles'
 
-const ProjectItem = () => {
+interface ProjectItemProps {
+    project: {
+        id: string,
+        title: string,
+        createdAt: string
+    }
+}
+
+const ProjectItem = ({project}: ProjectItemProps) => {
+
+    const {title, createdAt} = project
+
+    const onPress = () => {
+        console.warn(`Open ${title}`)
+    }
 
     return (
-        <View style={styles.root}>
+        <Pressable onPress={onPress} style={styles.root}>
             <View style={styles.iconContainer}>
                 <MaterialCommunityIcons 
                     name='file-outline' 
                     size={24} 
                     color="gray" />
             </View>
-            <Text style={styles.title}>Title</Text>
-            <Text style={styles.time}>2d</Text>
-        </View>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.time}>{createdAt}</Text>
+        </Pressable>
     )
 
 }
