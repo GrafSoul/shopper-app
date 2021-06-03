@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { styles } from './styles';
 
@@ -12,10 +13,12 @@ interface ProjectItemProps {
 }
 
 const ProjectItem = ({ project }: ProjectItemProps) => {
-    const { title, createdAt } = project;
+    const { id, title, createdAt } = project;
+    const navigation = useNavigation();
 
     const onPress = () => {
-        console.warn(`Open ${title}`);
+        navigation.navigate('Shop', { id: id });
+        // console.warn(`Open ${title}`);
     };
 
     return (
