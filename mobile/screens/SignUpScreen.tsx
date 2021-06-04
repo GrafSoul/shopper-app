@@ -1,6 +1,41 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    TextInput,
+    Pressable,
+    ActivityIndicator,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
+import { useMutation, gql } from '@apollo/client';
+
+const SIGN_UP_MUTATION = gql`
+    mutation signUp(
+        $name: String!
+        $email: String!
+        $password: String!
+        $avatar: String
+    ) {
+        signUp(
+            input: {
+                name: $name
+                email: $email
+                password: $password
+                avatar: $avatar
+            }
+        ) {
+            token
+            user {
+                id
+                name
+                email
+                avatar
+            }
+        }
+    }
+`;
 
 const SignUpScreen = () => {
     const [name, setName] = useState('');
@@ -10,8 +45,17 @@ const SignUpScreen = () => {
 
     const navigation = useNavigation();
 
-    const onSubmit = () => {
-        // submit
+    const [signUp, { data, error, loading }] = useMutation(SIGN_UP_MUTATION);
+
+    console.log(data);
+    console.log(error);
+
+    const onSubmit = async () => {
+        if (password === confirmPassword) {
+            await signUp({
+                variables: { name, email, password, avatar: 'aaaaaa' },
+            });
+        }
     };
 
     return (
@@ -46,7 +90,12 @@ const SignUpScreen = () => {
                 style={styles.Input}
             />
 
-            <Pressable onPress={onSubmit} style={styles.Button}>
+            <Pressable
+                disabled={loading}
+                onPress={onSubmit}
+                style={styles.Button}
+            >
+                {loading && <ActivityIndicator size="small" color="#19d341" />}
                 <Text style={styles.ButtonText}>Sign Up</Text>
             </Pressable>
 
@@ -82,6 +131,7 @@ const styles = StyleSheet.create({
     },
     Button: {
         width: '100%',
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         margin: 15,
