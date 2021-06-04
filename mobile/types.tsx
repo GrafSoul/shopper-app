@@ -8,6 +8,7 @@ export type RootStackParamList = {
     Shop: undefined;
     SignIn: undefined;
     SignUp: undefined;
+    Splash: undefined;
     NotFound: undefined;
 };
 

@@ -19,6 +19,7 @@ import ProjectsScreen from '../screens/ProjectsScreen';
 import ShopScreen from '../screens/ShopScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
+import SplashScreen from '../screens/SplashScreen';
 
 import LinkingConfiguration from './LinkingConfiguration';
 
@@ -44,6 +45,14 @@ const Stack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
     return (
         <Stack.Navigator>
+            <Stack.Screen
+                name="Splash"
+                component={SplashScreen}
+                options={{
+                    headerShown: false,
+                }}
+            />
+
             <Stack.Screen
                 name="SignIn"
                 component={SignInScreen}
