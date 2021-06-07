@@ -6,10 +6,11 @@ import {
     TextInput,
     Pressable,
     ActivityIndicator,
+    Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
 import { useMutation, gql } from '@apollo/client';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SIGN_UP_MUTATION = gql`
     mutation signUp(
@@ -47,14 +48,24 @@ const SignUpScreen = () => {
 
     const [signUp, { data, error, loading }] = useMutation(SIGN_UP_MUTATION);
 
-    console.log(data);
-    console.log(error);
+    if (error) {
+        Alert.alert('Error signing up.\nTry again!');
+    }
+
+    if (data) {
+        AsyncStorage.setItem('token', data.signUp.token).then(() => {
+            navigation.navigate('Lists');
+        });
+    }
 
     const onSubmit = async () => {
         if (password === confirmPassword) {
             await signUp({
                 variables: { name, email, password, avatar: 'aaaaaa' },
             });
+        } else {
+            Alert.alert("Passwords don't match. \nTry again!");
+            return false;
         }
     };
 

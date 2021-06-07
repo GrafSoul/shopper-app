@@ -1,14 +1,52 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+    StyleSheet,
+    Text,
+    View,
+    TextInput,
+    Pressable,
+    Alert,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
+import { useMutation, gql } from '@apollo/client';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const SIGN_IN_MUTATION = gql`
+    mutation signIn($email: String!, $password: String!) {
+        signIn(input: { email: $email, password: $password }) {
+            token
+            user {
+                id
+                email
+            }
+        }
+    }
+`;
 
 const SignInScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigation = useNavigation();
 
-    const onSubmit = () => {
-        // submit
+    const [signIn, { data, error, loading }] = useMutation(SIGN_IN_MUTATION);
+
+    useEffect(() => {
+        if (error) {
+            Alert.alert('Invalid credentials.\nTry again!');
+        }
+    }, [error]);
+
+    if (data) {
+        AsyncStorage.setItem('token', data.signIn.token).then(() => {
+            navigation.navigate('Lists');
+        });
+    }
+
+    const onSubmit = async () => {
+        await signIn({
+            variables: { email, password },
+        });
     };
 
     return (
@@ -28,7 +66,11 @@ const SignInScreen = () => {
                 style={styles.Input}
             />
 
-            <Pressable onPress={onSubmit} style={styles.Button}>
+            <Pressable
+                disabled={loading}
+                onPress={onSubmit}
+                style={styles.Button}
+            >
                 <Text style={styles.ButtonText}>Sign In</Text>
             </Pressable>
 
