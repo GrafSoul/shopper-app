@@ -1,12 +1,7 @@
 // Environment
 require('dotenv').config();
-const {
-    DB_USER,
-    DB_USER_PASSWORD,
-    DB_CLUSTER,
-    DB_NAME,
-    JWT_SECRET,
-} = process.env;
+const { DB_USER, DB_USER_PASSWORD, DB_CLUSTER, DB_NAME, JWT_SECRET } =
+    process.env;
 // Apollo
 const { ApolloServer } = require('apollo-server');
 const { typeDefs } = require('./graphql/typeDef');
