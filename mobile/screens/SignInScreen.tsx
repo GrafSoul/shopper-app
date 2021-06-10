@@ -66,11 +66,7 @@ const SignInScreen = () => {
                 style={styles.Input}
             />
 
-            <Pressable
-                disabled={loading}
-                onPress={onSubmit}
-                style={styles.Button}
-            >
+            <Pressable onPress={onSubmit} style={styles.Button}>
                 <Text style={styles.ButtonText}>Sign In</Text>
             </Pressable>
 

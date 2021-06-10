@@ -12,20 +12,7 @@ const USER_PROJECTS = gql`
             id
             title
             createdAt
-            progress
-            users {
-                id
-                email
-                name
-            }
-            shopToDos {
-                shopList {
-                    id
-                    title
-                }
-            }
         }
-    }
 `;
 
 const ProjectsScreen = () => {
