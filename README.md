@@ -2,6 +2,8 @@
 
 Shopper is a mobile app for creating and managing your shopping list
 
+STOP PROJECT! NO WORK! SEE ORIGINAL FILES!
+
 ### Development & Start
 
 Install [NodeJS]. I also recommend installing and using [Yarn] for developing applications.
