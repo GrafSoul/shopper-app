@@ -1,74 +1,49 @@
 // Core
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     StyleSheet,
     TextInput,
     FlatList,
     KeyboardAvoidingView,
     Platform,
-    Alert,
 } from 'react-native';
-
-import { useQuery, gql } from '@apollo/client';
-import { useRoute } from '@react-navigation/native';
-
+// Theme
+import { View } from '../components/Themed';
 // Components
 import ShopListItem from '../components/ShopListItem';
-
-const GEt_SHOP = gql`
-    query getShopList($id: ID!) {
-        getShopList(id: $id) {
-            id
-            title
-            createdAt
-            users {
-                id
-                email
-                name
-            }
-        }
-    }
-`;
 
 let id = '4';
 
 export default function ShopScreen() {
-    const [project, setProject] = useState(null);
     const [title, setTitle] = useState('');
-
-    const route = useRoute();
-
-    const { data, error, loading } = useQuery(GEt_SHOP, {
-        variables: { id: route.params.id },
-    });
-
-    useEffect(() => {
-        if (error) {
-            Alert.alert('Error fetching projects,', error.message);
-        }
-    }, [error]);
-
-    useEffect(() => {
-        if (data) {
-            setProject(data.getShopList);
-            setTitle(data.getShopList.title);
-        }
-    }, [data]);
+    const [list, setLists] = useState([
+        {
+            id: '1',
+            content: 'Buy milk',
+            isCompleted: true,
+        },
+        {
+            id: '2',
+            content: 'Buy cake',
+            isCompleted: false,
+        },
+        {
+            id: '3',
+            content: 'Buy bread',
+            isCompleted: false,
+        },
+    ]);
 
     const createNewItem = (index: number) => {
-        // const newList = [...list];
-        // newList.splice(index, 0, {
-        //     id: id,
-        //     content: '',
-        //     isCompleted: false,
-        // });
-        // setLists(newList);
+        const newList = [...list];
+        newList.splice(index, 0, {
+            id: id,
+            content: '',
+            isCompleted: false,
+        });
+        setLists(newList);
         // console.warn(`new item at ${index}`)
     };
-
-    if (!project) {
-        return null;
-    }
 
     return (
         <KeyboardAvoidingView
@@ -84,7 +59,7 @@ export default function ShopScreen() {
             />
 
             <FlatList
-                data={project.todos}
+                data={list}
                 renderItem={({ item, index }) => (
                     <ShopListItem
                         onSubmit={() => createNewItem(index + 1)}
